@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
@@ -24,7 +25,9 @@ namespace OneTruePath.Domain
 
         private void PopulateStoryTree()
         {
-            using (StreamReader file = File.OpenText(@"C:\Development\OneTruePath\test-import.json"))
+            string jsonFilePath = ConfigurationManager.AppSettings["jsonFilePath"];
+
+            using (StreamReader file = File.OpenText(@jsonFilePath))
             {
                 JsonSerializer serializer = new JsonSerializer();
                 _storyTree = (List<StoryPoint>)serializer.Deserialize(file, typeof(List<StoryPoint>));
