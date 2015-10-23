@@ -2,8 +2,8 @@
 {
     public interface IStoryNavigator
     {
-        string GoBack();
-        string GoForward(int optionNumber);
+        string GetPreviousOptions();
+        string GetNextOptions(int optionNumber);
         string Refresh();
     }
 }

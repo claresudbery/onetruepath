@@ -15,24 +15,25 @@ namespace OneTruePath.API.Modules
 
             Get["/truepath/-"] = parameters =>
             {
-                return storyNavigator.GoBack();
+                string result = storyNavigator.GetPreviousOptions();
+                return result;
             };
 
             Get["/truepath/1"] = parameters =>
             {
-                string result = storyNavigator.GoForward(1);
+                string result = storyNavigator.GetNextOptions(1);
                 return result;
             };
 
             Get["/truepath/2"] = parameters =>
             {
-                string result = storyNavigator.GoForward(2);
+                string result = storyNavigator.GetNextOptions(2);
                 return result;
             };
 
             Get["/truepath/3"] = parameters =>
             {
-                string result = storyNavigator.GoForward(3);
+                string result = storyNavigator.GetNextOptions(3);
                 return result;
             };
         }

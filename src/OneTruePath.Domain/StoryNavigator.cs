@@ -36,7 +36,8 @@ namespace OneTruePath.Domain
             Initialise();
 
             string errorResult = CheckDataIntegrity();
-            string initialText = GetOptions(firstTimeIn: true);
+            LoadOptions();
+            string initialText = GetStringOptions(firstTimeIn: true);
 
             return errorResult == "" ? initialText : errorResult;
         }
@@ -56,7 +57,7 @@ namespace OneTruePath.Domain
         {
             string result = "";
 
-            GetOptions();
+            LoadOptions();
             GoForward(1);
 
             CheckAllOptions(ref result);
@@ -75,51 +76,79 @@ namespace OneTruePath.Domain
                 {
                     GoForward(pointNumber);
                     CheckAllOptions(ref result);
+                    GoBack();
                 }
             }
             else
             {
                 if (numStoryPoints < 1)
                 {
-                    result = result + string.Format("This option has no children: '{0}' <br/><br/>", _currentStoryParents[_currentStoryParents.Count - 1].Id);
+                    result = result +
+                             string.Format("This option has no children: '{0}' <br/><br/>",
+                                           _currentStoryParents[_currentStoryParents.Count - 1].Id);
                 }
-                GoForward(1);
-                if (numStoryPoints > 1)
+                else
                 {
-                    result = result + string.Format("This option should be a leaf, but has children: '{0}' <br/><br/>", _currentStoryParents[_currentStoryParents.Count - 1].Id);
+                    GoForward(1);
+                    if (numStoryPoints > 1)
+                    {
+                        result = result + string.Format("This option should be a leaf, but has children: '{0}' <br/><br/>", _currentStoryParents[_currentStoryParents.Count - 1].Id);
+                    }
+                    GoBack();
                 }
-                GoBack();
-                GoBack();
             }
         }
 
-        public string GoBack()
+        public void GoBack()
         {
-            string result = "";
-
             if (_currentStoryParents.Count > 1)
             {
                 _currentStoryParents.Remove(_currentStoryParents[_currentStoryParents.Count - 1]);
-                
-                result = GetOptions();
+
+                LoadOptions();
             }
             else
             {
-                result = "You can't go back any further.<br/><br/>" + GetOptions();
+                LoadOptions();
+            }
+        }
+
+        public string GetPreviousOptions()
+        {
+            string result = "";
+
+            GoBack();
+
+            if (_currentStoryParents.Count > 1)
+            {
+                result = GetStringOptions();
+            }
+            else
+            {
+                result = "You can't go back any further.<br/><br/>" + GetStringOptions(firstTimeIn: true);
             }
 
             return result;
         }
 
-        public string GoForward(int optionNumber)
+        public void GoForward(int optionNumber)
         {
-            string result = "";
-
             if (optionNumber <= _currentStoryPoints.Count)
             {
                 _currentStoryParents.Add(_currentStoryPoints[optionNumber - 1]);
+                
+                LoadOptions();
+            }
+        }
 
-                result = GetOptions();
+        public string GetNextOptions(int optionNumber)
+        {
+            string result = "";
+            
+            if (optionNumber <= _currentStoryPoints.Count)
+            {
+                GoForward(optionNumber);
+                result = GetStringOptions();
             }
             else
             {
@@ -129,11 +158,11 @@ namespace OneTruePath.Domain
             return result;
         }
 
-        private string GetOptions(bool firstTimeIn = false)
+        private string GetStringOptions(bool firstTimeIn = false)
         {
             string options = "No options left.";
 
-            _currentStoryPoints = _storyTree.Where(x => x.Parent == _currentStoryParents[_currentStoryParents.Count - 1].Id).ToList();
+            LoadOptions();
 
             if (_currentStoryPoints.Count > 0)
             {
@@ -164,6 +193,11 @@ namespace OneTruePath.Domain
             }
 
             return options;
+        }
+
+        private void LoadOptions()
+        {
+            _currentStoryPoints = _storyTree.Where(x => x.Parent == _currentStoryParents[_currentStoryParents.Count - 1].Id).ToList();
         }
     }
 }
