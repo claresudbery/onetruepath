@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using System.Net.Mime;
 using System.Linq;
 using Newtonsoft.Json;
 
@@ -25,9 +26,10 @@ namespace OneTruePath.Domain
 
         private void PopulateStoryTree()
         {
-            string jsonFilePath = ConfigurationManager.AppSettings["jsonFilePath"];
+            string jsonFileName = ConfigurationManager.AppSettings["jsonFileName"];
+            string jsonFilePath = System.AppDomain.CurrentDomain.BaseDirectory;
 
-            using (StreamReader file = File.OpenText(@jsonFilePath))
+            using (StreamReader file = File.OpenText(jsonFilePath + "\\" + jsonFileName))
             {
                 JsonSerializer serializer = new JsonSerializer();
                 _storyTree = (List<StoryPoint>)serializer.Deserialize(file, typeof(List<StoryPoint>));
