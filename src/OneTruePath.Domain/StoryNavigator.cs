@@ -19,13 +19,12 @@ namespace OneTruePath.Domain
 
             PopulateStoryTree();
 
-            //_currentStoryPoints = _storyTree.Where(x => x.Parent == "null").ToList();
             _currentStoryParents.Add(_storyTree.First(x => x.Parent == "nothing"));
         }
 
         private void PopulateStoryTree()
         {
-            using (StreamReader file = File.OpenText(@"C:\_git\OneTruePath\test-import.json"))
+            using (StreamReader file = File.OpenText(@"C:\Development\OneTruePath\test-import.json"))
             {
                 JsonSerializer serializer = new JsonSerializer();
                 _storyTree = (List<StoryPoint>)serializer.Deserialize(file, typeof(List<StoryPoint>));
@@ -36,19 +35,33 @@ namespace OneTruePath.Domain
         {
             Initialise();
 
-            string initialText = GetOptions();
             string errorResult = CheckDataIntegrity();
+            string initialText = GetOptions(firstTimeIn: true);
 
             return errorResult == "" ? initialText : errorResult;
+        }
+
+        private void RepopulateStoryTree()
+        {
+            _storyTree.Clear();
+            _currentStoryParents.Clear();
+            _currentStoryPoints.Clear();
+
+            PopulateStoryTree();
+
+            _currentStoryParents.Add(_storyTree.First(x => x.Parent == "nothing"));
         }
 
         private string CheckDataIntegrity()
         {
             string result = "";
 
+            GetOptions();
             GoForward(1);
 
             CheckAllOptions(ref result);
+
+            RepopulateStoryTree();
             
             return result;
         }
@@ -116,19 +129,36 @@ namespace OneTruePath.Domain
             return result;
         }
 
-        private string GetOptions()
+        private string GetOptions(bool firstTimeIn = false)
         {
-            string options = "No child nodes found.";
+            string options = "No options left.";
 
             _currentStoryPoints = _storyTree.Where(x => x.Parent == _currentStoryParents[_currentStoryParents.Count - 1].Id).ToList();
 
             if (_currentStoryPoints.Count > 0)
             {
-                options = "Your options are...<br/><br/><br/><br/>";
+                options = _currentStoryPoints.Count == 1 && !firstTimeIn ? "<br/>" : "Your options are...<br/><br/><br/><br/>";
                 foreach (var storyPoint in _currentStoryPoints)
                 {
-                    options = options + string.Format("{0}. {1}<br/><br/>",
-                                                      _currentStoryPoints.IndexOf(storyPoint) + 1,
+                    string either = "Either... ";
+                    string or = "Or... ";
+
+                    int currentIndex = _currentStoryPoints.IndexOf(storyPoint);
+                    string prefix = firstTimeIn ? "1. " : "";
+                    if (_currentStoryPoints.Count > 1)
+                    {
+                        if (currentIndex == 0)
+                        {
+                            prefix = string.Format("{0}{1}. ", either, currentIndex + 1);
+                        }
+                        else
+                        {
+                            prefix = string.Format("{0}{1}. ", or, currentIndex + 1);
+                        }
+                    }
+
+                    options = options + string.Format("{0}{1}<br/><br/>",
+                                                      prefix,
                                                       storyPoint.Id);
                 }
             }
