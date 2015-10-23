@@ -35,7 +35,49 @@ namespace OneTruePath.Domain
         public string Refresh()
         {
             Initialise();
-            return GetOptions();
+
+            string initialText = GetOptions();
+            string errorResult = CheckDataIntegrity();
+
+            return errorResult == "" ? initialText : errorResult;
+        }
+
+        private string CheckDataIntegrity()
+        {
+            string result = "";
+
+            GoForward(1);
+
+            CheckAllOptions(ref result);
+            
+            return result;
+        }
+
+        private void CheckAllOptions(ref string result)
+        {
+            int numStoryPoints = _currentStoryPoints.Count;
+            if (numStoryPoints > 1)
+            {
+                for (int pointNumber = 1; pointNumber <= numStoryPoints; pointNumber++)
+                {
+                    GoForward(pointNumber);
+                    CheckAllOptions(ref result);
+                }
+            }
+            else
+            {
+                if (numStoryPoints < 1)
+                {
+                    result = result + string.Format("This option has no children: '{0}' <br/><br/>", _currentStoryParents[_currentStoryParents.Count - 1].Id);
+                }
+                GoForward(1);
+                if (numStoryPoints > 1)
+                {
+                    result = result + string.Format("This option should be a leaf, but has children: '{0}' <br/><br/>", _currentStoryParents[_currentStoryParents.Count - 1].Id);
+                }
+                GoBack();
+                GoBack();
+            }
         }
 
         public string GoBack()
