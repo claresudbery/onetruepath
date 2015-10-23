@@ -1,0 +1,212 @@
+{
+	"debug": {
+		"msbuild": {
+			"configuration": "Release",
+			"verbosity": "minimal",
+			"target": "Clean;Rebuild",
+			"version": "Microsoft.Net\\Framework64\\v4.0.30319\\MSBuild.exe"
+		},
+		"nunit": {
+			"nunit_console_location": "..\\rake-tools\\nunit\\nunit-console.exe",
+			"unit_tests": {
+				"nunit_project_file": ".\\tests\\OneTruePath.Tests\\OneTruePath.nunit",
+				"nunit_xml_output": ".\\tests\\OneTruePath.Tests\\nunit_xml_output.xml"
+			},
+			"integration_tests": {
+				"nunit_project_file": ".\\tests\\OneTruePath.Integration.Tests\\integration.nunit",
+				"nunit_xml_output": ".\\tests\\OneTruePath.Integration.Tests\\nunit_xml_output.xml"
+			}
+		},
+		"web_farm": {
+			"enabled": false
+		},
+		"host_file": {
+			"entries" : [
+				{ "hostname": "onetruepath.local", "ipaddress": "127.0.0.1" }
+			]
+		},
+		"msdeploy": {
+			"port":89,
+			"application_name": "onetruepath.local",
+			"content_directory": ".\\build\\_PublishedWebsites\\OneTruePath.api",
+			"templates": {
+				"declared_parameters": "declared-parameters.template.xml",
+				"set_parameters": "set-parameters.template.xml"
+			},
+			"parameters":{
+				"installation_directory":"C:\\inetpub\\onetruepath\\",
+				"http_binding": "*:80:onetruepath.local",
+				"hostname": "onetruepath.local",
+				"runtime_version": "v4.0",
+				"managed_pipeline_mode": "Integrated",
+				"identity_type": "ApplicationPoolIdentity",
+				"app_pool_username": "",
+				"app_pool_password": "",
+				"debug": "true",
+				"connection_string_primary": "Server=DBTEST01.ad.laterooms.com;Database=laterooms;connection timeout=30;Integrated Security=SSPI;",
+				"cache_expire_minutes": "10",
+				"cache_enabled": "true"
+			},
+			"server_groups": [
+				{
+					"name": "localhost",
+					"servers": ["127.0.0.1"]
+				}
+			]
+		}
+	},
+	"qa": {
+		"msbuild": {
+			"configuration": "Release",
+			"verbosity": "minimal",
+			"target": "Clean;Rebuild",
+			"version": "Microsoft.Net\\Framework64\\v4.0.30319\\MSBuild.exe"
+		},
+		"nunit": {
+			"unit_tests": {
+				"nunit_console_location": "..\\rake-tools\\nunit\\nunit-console.exe",
+				"nunit_project_file": ".\\tests\\OneTruePath.Tests\\OneTruePath.nunit",
+				"nunit_xml_output": ".\\tests\\OneTruePath.Tests\\nunit_xml_output.xml"
+			},
+			"integration_tests": {
+				"nunit_console_location": "..\\rake-tools\\nunit\\nunit-console.exe",
+				"nunit_project_file": ".\\tests\\OneTruePath.Integration.Tests\\integration.nunit",
+				"nunit_xml_output": ".\\tests\\OneTruePath.Integration.Tests\\nunit_xml_output.xml"
+			}
+		},
+		"web_farm": {
+			"enabled": false
+		},
+		"host_file": {
+			"entries" : [
+				{ "hostname": "onetruepath.qa.ad.laterooms.com", "ipaddress": "127.0.0.1" }
+			]
+		},
+		"msdeploy": {
+			"port":89,
+			"application_name": "onetruepath.qa",
+			"content_directory": ".\\build\\_PublishedWebsites\\OneTruePath.api",
+			"templates": {
+				"declared_parameters": "declared-parameters.template.xml",
+				"set_parameters": "set-parameters.template.xml"
+			},
+			"parameters":{
+				"installation_directory":"C:\\laterooms\\asp_4.0\\onetruepath",
+				"http_binding": "*:80:onetruepath.qa.ad.laterooms.com",
+				"hostname": "onetruepath.qa.ad.laterooms.com",
+				"runtime_version": "v4.0",
+				"managed_pipeline_mode": "Integrated",
+				"identity_type": "ApplicationPoolIdentity",
+				"app_pool_username": "",
+				"app_pool_password": "",
+				"debug": "true",
+				"connection_string_primary": "Server=DBTEST01.ad.laterooms.com;Database=laterooms;connection timeout=30;Integrated Security=SSPI;",
+				"cache_expire_minutes": "10",
+				"cache_enabled": "false"
+			},
+			"server_groups": [
+				{
+					"name": "group_1",
+					"servers": ["teltlrghda01.ad.laterooms.com","teltlrghda03.ad.laterooms.com"]
+				},
+				{
+					"name": "localhost",
+					"servers": ["127.0.0.1"]
+				}
+			]
+		}
+	},
+	"telfordlive": {
+		"msbuild": {
+			"configuration": "release",
+			"verbosity": "minimal",
+			"target": "Clean;Rebuild",
+			"version": "Microsoft.Net\\Framework64\\v4.0.30319\\MSBuild.exe"
+		},
+		"nunit": {
+			"unit_tests": {
+				"nunit_console_location": "..\\rake-tools\\nunit\\nunit-console.exe",
+				"nunit_project_file": ".\\tests\\OneTruePath.Tests\\OneTruePath.nunit",
+				"nunit_xml_output": ".\\tests\\OneTruePath.Tests\\nunit_xml_output.xml"
+			},
+			"integration_tests": {
+				"nunit_console_location": "..\\rake-tools\\nunit\\nunit-console.exe",
+				"nunit_project_file": ".\\tests\\OneTruePath.Integration.Tests\\integration.nunit",
+				"nunit_xml_output": ".\\tests\\OneTruePath.Integration.Tests\\nunit_xml_output.xml"
+			}
+		},
+		"web_farm": {
+			"enabled": false
+		},
+		"host_file": {
+			"entries" : [
+				{ "hostname": "onetruepath.laterooms.com", "ipaddress": "172.31.164.33" }
+			]
+		},
+		"msdeploy": {
+			"port":89,
+			"application_name": "onetruepath",
+			"content_directory": ".\\build\\_PublishedWebsites\\OneTruePath.api",
+			"templates": {
+				"declared_parameters": "declared-parameters.template.xml",
+				"set_parameters": "set-parameters.template.xml"
+			},
+			"parameters":{
+				"installation_directory":"D:\\Laterooms\\asp_4.0\\onetruepath",
+				"http_binding": "*:18752:onetruepath.laterooms.com",
+				"hostname": "onetruepath.laterooms.com",
+				"runtime_version": "v4.0",
+				"managed_pipeline_mode": "Integrated",
+				"identity_type": "SpecificUser",
+				"app_pool_username": "TLRG\\svc_hotel_api",
+				"app_pool_password": "L&amp;hgd234Nhd2&#64;4p",
+				"debug": "false",
+				"connection_string_primary": "Server=172.31.144.69;Database=laterooms;connection timeout=30;Integrated Security=SSPI;",
+				"cache_expire_minutes": "10",
+				"cache_enabled": "true"
+			},
+			"server_groups": [
+				{
+					"name": "blue",
+					"servers": ["TELAPP439P.tlrg.org:89", "TELAPP441P.tlrg.org:89"]
+				},
+				{
+					"name": "green",
+					"servers": ["TELAPP440P.tlrg.org:89", "TELAPP442P.tlrg.org:89"]
+				},
+				{
+					"name": "purple",
+					"servers": ["TELAPP443P.tlrg.org:89", "TELAPP444P.tlrg.org:89"]
+				},
+				{
+					"name": "red",
+					"servers": ["TELWEB100P.tlrg.org:89", "TELWEB101P.tlrg.org:89"]
+				},
+				{
+					"name": "orange",
+					"servers": ["TELWEB102P.tlrg.org:89", "TELWEB103P.tlrg.org:89"]
+				},
+				{
+					"name": "violet",
+					"servers": ["TELWEB104P.tlrg.org:89", "TELWEB104P.tlrg.org:89"]
+				},
+				{
+					"name": "yellow",
+					"servers": ["NEWAPP013P.tlrg.org:89", "NEWAPP014P.tlrg.org:89"]
+				},
+				{
+					"name": "pink",
+					"servers": [ "TELWEB308P.tlrg.org:89", "TELWEB309P.tlrg.org:89"]
+				},
+				{
+					"name": "indigo",
+					"servers": ["TELWEB312P.tlrg.org:89", "TELWEB314P.tlrg.org:89"]
+				},
+				{
+					"name": "localhost",
+					"servers": ["localhost"]
+				}
+			]
+		}
+	}
+}
